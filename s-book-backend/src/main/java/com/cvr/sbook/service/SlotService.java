@@ -26,5 +26,17 @@ public class SlotService {
             slot.setBooked(false);
             slotRepository.save(slot);
         }
+
+    }
+    public Slot bookSlot(Long slotId) {
+        Slot slot = slotRepository.findById(slotId)
+                .orElseThrow(() -> new RuntimeException("Slot not found"));
+
+        if (slot.isBooked()) {
+            throw new RuntimeException("Slot already booked!");
+        }
+
+        slot.setBooked(true);
+        return slotRepository.save(slot);
     }
 }

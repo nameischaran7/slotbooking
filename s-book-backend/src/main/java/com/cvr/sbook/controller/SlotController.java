@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/slots")
 public class SlotController {
@@ -21,7 +21,7 @@ public class SlotController {
     }
 
     // Get available slots for a specific vendor
-    // Example: http://localhost:8090/api/slots/vendor/1
+    // Example: http://localhost:8010/api/slots/vendor/1
     @GetMapping("/vendor/{vendorId}")
     public List<Slot> getSlotsByVendor(@PathVariable Long vendorId) {
         return slotRepository.findByVendorId(vendorId);

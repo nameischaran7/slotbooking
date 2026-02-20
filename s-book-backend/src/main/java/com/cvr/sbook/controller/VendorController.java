@@ -30,4 +30,8 @@ public class VendorController {
         slotService.generateDailySlots(savedVendor);
         return savedVendor;
     }
+    @GetMapping("/test")
+    public String test() {
+        return "Controller is working, mowa!";
+    }
 }

@@ -1,17 +1,17 @@
--- Inserting a Regular User
---INSERT INTO users (name, email, password, role)
---VALUES ('Charan', 'charan@test.com', '1234', 'USER');
---INSERT INTO users (name, email, password, role)
---VALUES ('Prabhas', 'prabhas@test.com', '1234', 'USER');
--- Inserting a Vendor
--- Note: Check if you have a 'vendors' table. Hibernate created one in your logs.
-INSERT INTO vendors (name, location, category, price_per_hour)
-VALUES ('Premium Turf', 'Hyderabad', 'Sports', 1200.0);
+-- Inserting a Vendor (ID 1)
+INSERT INTO vendors (id, name, location, category, price_per_hour, email, password)
+VALUES (1, 'Premium Turf', 'Hyderabad', 'Sports', 1200.0, 'vendor@test.com', '1234');
 
--- Pre-loading some Slots (Matching Hibernate's column names)
--- vendor_id 1 refers to the vendor we just created above.
+-- Pre-loading Slots for Vendor ID 1
+-- ADD the vendor_id column here!
 INSERT INTO slots (vendor_id, start_time, end_time, is_booked)
-VALUES (1, '2026-03-04 10:00:00', '2026-03-04 11:00:00', false);
+VALUES (1, '2026-03-05T10:00:00', '2026-03-05T11:00:00', false);
 
 INSERT INTO slots (vendor_id, start_time, end_time, is_booked)
-VALUES (1, '2026-03-04 11:00:00', '2026-03-04 12:00:00', false);
+VALUES (1, '2026-03-05T11:00:00', '2026-03-05T12:00:00', false);
+
+-- Inserting second Vendor (ID 2)
+INSERT INTO vendors (id, name, location, category, price_per_hour, email, password)
+VALUES (2, 'Gachibowli Arena', 'Gachibowli', 'Football', 1500.0, 'arena@test.com', 'pass123');
+INSERT INTO users (id, name, email, password, role)
+VALUES (1, 'louda', 'louda.com', '123', 'USER');

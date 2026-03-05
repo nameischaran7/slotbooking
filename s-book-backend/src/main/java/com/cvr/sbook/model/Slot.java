@@ -10,7 +10,10 @@ public class Slot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
+
+    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
     private boolean isBooked = false;
     // In your Spring Boot Slot.java
@@ -30,11 +33,16 @@ public class Slot {
     public LocalDateTime getStartTime() {
         return startTime;
     }
+    public LocalDateTime getEndTime(){
+        return endTime;
+    }
 
     public String getBookedByName() {
         return bookedByName;
     }
-
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
     public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
     public boolean isBooked() { return isBooked; }
     public void setBooked(boolean booked) { isBooked = booked; }

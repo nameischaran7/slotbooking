@@ -28,7 +28,8 @@ public class SlotService {
         }
 
     }
-    public Slot bookSlot(Long slotId) {
+    // Pass the userName as a parameter
+    public Slot bookSlot(Long slotId, String userName) {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
 
@@ -37,6 +38,7 @@ public class SlotService {
         }
 
         slot.setBooked(true);
+        slot.setBookedByName(userName); // <--- THIS SAVES THE NAME TO THE DB!
         return slotRepository.save(slot);
     }
 }

@@ -4,6 +4,7 @@ import com.cvr.sbook.model.Vendor;
 import com.cvr.sbook.repository.VendorRepository;
 import com.cvr.sbook.service.SlotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,5 +34,11 @@ public class VendorController {
     @GetMapping("/test")
     public String test() {
         return "Controller is working, mowa!";
+    }
+    @PostMapping("/generate/{vendorId}")
+    public ResponseEntity<String> createSlots(@PathVariable Long vendorId) {
+        Vendor vendor = vendorRepository.findById(vendorId).get();
+        slotService.generateDailySlots(vendor);
+        return ResponseEntity.ok("12 Slots created for " + vendor.getName());
     }
 }

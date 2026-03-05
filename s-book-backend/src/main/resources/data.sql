@@ -4,11 +4,11 @@ VALUES (1, 'Premium Turf', 'Hyderabad', 'Sports', 1200.0, 'vendor@test.com', '12
 
 -- Pre-loading Slots for Vendor ID 1
 -- ADD the vendor_id column here!
-INSERT INTO slots (vendor_id, start_time, end_time, is_booked)
-VALUES (1, '2026-03-05T10:00:00', '2026-03-05T11:00:00', false);
-
-INSERT INTO slots (vendor_id, start_time, end_time, is_booked)
-VALUES (1, '2026-03-05T11:00:00', '2026-03-05T12:00:00', false);
+--INSERT INTO slots (vendor_id, start_time, end_time, is_booked)
+--VALUES (1, '2026-03-05T10:00:00', '2026-03-05T11:00:00', false);
+--
+--INSERT INTO slots (vendor_id, start_time, end_time, is_booked)
+--VALUES (1, '2026-03-05T11:00:00', '2026-03-05T12:00:00', false);
 
 -- Inserting second Vendor (ID 2)
 INSERT INTO vendors (id, name, location, category, price_per_hour, email, password)

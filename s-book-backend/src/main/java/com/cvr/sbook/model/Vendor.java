@@ -1,7 +1,6 @@
 package com.cvr.sbook.model;
 
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "vendors")
 public class Vendor {
@@ -14,22 +13,20 @@ public class Vendor {
     private String location;
     private Double pricePerHour;
 
-    // 1. Mandatory No-Args Constructor
-    public Vendor() {}
+    // ADD THESE TWO FIELDS FOR LOGIN
+    @Column(unique = true)
+    private String email;
+    private String password;
 
-    // 2. Standard Getters and Setters (IntelliJ can generate these: Alt+Insert)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public Double getPricePerHour() { return pricePerHour; }
-    public void setPricePerHour(Double pricePerHour) { this.pricePerHour = pricePerHour; }
+    // Add Getters and Setters for these two (Alt + Insert)
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public Long getId(){
+        return id;
+    }
+    public String getName(){
+        return name;
+    }
 }

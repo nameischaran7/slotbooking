@@ -11,6 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/vendors")
+
+
+
+
+
 public class VendorController {
 
     @Autowired
@@ -31,14 +36,21 @@ public class VendorController {
         slotService.generateDailySlots(savedVendor);
         return savedVendor;
     }
+
     @GetMapping("/test")
     public String test() {
         return "Controller is working, mowa!";
     }
+
     @PostMapping("/generate/{vendorId}")
     public ResponseEntity<String> createSlots(@PathVariable Long vendorId) {
         Vendor vendor = vendorRepository.findById(vendorId).get();
         slotService.generateDailySlots(vendor);
         return ResponseEntity.ok("12 Slots created for " + vendor.getName());
+    }
+
+    @PostMapping("/signup") // Add this specific sub-path
+    public Vendor signupVendor(@RequestBody Vendor vendor) {
+        return vendorRepository.save(vendor);
     }
 }

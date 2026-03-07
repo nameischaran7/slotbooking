@@ -29,7 +29,7 @@ public class VendorController {
     @Autowired
     private SlotService slotService; // Add this line at the top with other @Autowired
 
-    @PostMapping
+    @PostMapping("/signup")
     public Vendor addVendor(@RequestBody Vendor vendor) {
         Vendor savedVendor = vendorRepository.save(vendor);
         // Automatically create 12 slots for this new vendor!
@@ -49,8 +49,8 @@ public class VendorController {
         return ResponseEntity.ok("12 Slots created for " + vendor.getName());
     }
 
-    @PostMapping("/signup") // Add this specific sub-path
-    public Vendor signupVendor(@RequestBody Vendor vendor) {
-        return vendorRepository.save(vendor);
-    }
+//    @PostMapping("/signup") // Add this specific sub-path
+//    public Vendor signupVendor(@RequestBody Vendor vendor) {
+//        return vendorRepository.save(vendor);
+//    }
 }

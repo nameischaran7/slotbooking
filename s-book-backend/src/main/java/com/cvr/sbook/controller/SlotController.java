@@ -30,7 +30,7 @@ public class SlotController {
     // Update a slot to 'booked' status
 
     @PostMapping("/{slotId}/book")
-    public Slot bookSlot(@PathVariable Long slotId, @RequestParam String userName) {
+    public Slot bookSlot(@PathVariable Long slotId, @RequestBody Slot slotDetails) {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
 
@@ -39,7 +39,7 @@ public class SlotController {
         }
 
         slot.setBooked(true);
-        slot.setBookedByName(userName); // Save the user's name from the app
+        slot.setBookedByName(slotDetails.getBookedByName()); // Save the user's name from the app
         return slotRepository.save(slot);
     }
 }

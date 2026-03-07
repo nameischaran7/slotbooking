@@ -11,28 +11,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/vendors")
-
-
-
-
-
 public class VendorController {
 
     @Autowired
     private VendorRepository vendorRepository;
+
+    @Autowired
+    private SlotService slotService;
 
     @GetMapping
     public List<Vendor> getAllVendors() {
         return vendorRepository.findAll();
     }
 
-    @Autowired
-    private SlotService slotService; // Add this line at the top with other @Autowired
-
+    // This handles the main Vendor Signup and Slot Generation
     @PostMapping("/signup")
-    public Vendor addVendor(@RequestBody Vendor vendor) {
+    public Vendor signupVendor(@RequestBody Vendor vendor) {
         Vendor savedVendor = vendorRepository.save(vendor);
-        // Automatically create 12 slots for this new vendor!
+        // This ensures the 3rd tier (Database) is populated immediately
         slotService.generateDailySlots(savedVendor);
         return savedVendor;
     }
@@ -42,15 +38,14 @@ public class VendorController {
         return "Controller is working, mowa!";
     }
 
+    // Manual slot generation if something goes wrong
     @PostMapping("/generate/{vendorId}")
     public ResponseEntity<String> createSlots(@PathVariable Long vendorId) {
-        Vendor vendor = vendorRepository.findById(vendorId).get();
-        slotService.generateDailySlots(vendor);
-        return ResponseEntity.ok("12 Slots created for " + vendor.getName());
+        return vendorRepository.findById(vendorId)
+                .map(vendor -> {
+                    slotService.generateDailySlots(vendor);
+                    return ResponseEntity.ok("12 Slots created for " + vendor.getName());
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
-
-//    @PostMapping("/signup") // Add this specific sub-path
-//    public Vendor signupVendor(@RequestBody Vendor vendor) {
-//        return vendorRepository.save(vendor);
-//    }
 }

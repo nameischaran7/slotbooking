@@ -38,6 +38,7 @@ public class VendorController {
         return "Controller is working, mowa!";
     }
 
+
     // Manual slot generation if something goes wrong
     @PostMapping("/generate/{vendorId}")
     public ResponseEntity<String> createSlots(@PathVariable Long vendorId) {
@@ -47,5 +48,12 @@ public class VendorController {
                     return ResponseEntity.ok("12 Slots created for " + vendor.getName());
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/search")
+    public List<Vendor> searchVendors(@RequestParam String query) {
+        // We pass the same 'query' string three times to search all three fields
+        return vendorRepository.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCaseOrLocationContainingIgnoreCase(
+                query, query, query
+        );
     }
 }

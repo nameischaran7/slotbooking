@@ -1,6 +1,11 @@
-# Step 1: Use a Java 24 image (matching your local JDK)
-FROM openjdk:24-jdk-slim
-# Step 2: Copy your built JAR file to the cloud
-COPY target/*.jar app.jar
-# Step 3: Tell the cloud to run your app
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Stage 1: Build the app using Maven 3.9 and Java 17
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the app using Java 17
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

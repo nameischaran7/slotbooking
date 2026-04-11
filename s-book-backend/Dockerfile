@@ -1,11 +1,12 @@
-# Stage 1: Build the app using Maven 3.9 and Java 17
+# Stage 1: Build
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the app using Java 17
+# Stage 2: Run
 FROM eclipse-temurin:17-jre
 WORKDIR /app
+# Note: Added a '*' to catch the exact JAR name
 COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

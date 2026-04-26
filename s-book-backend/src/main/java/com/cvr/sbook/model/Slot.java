@@ -2,6 +2,7 @@ package com.cvr.sbook.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "slots")
@@ -10,50 +11,44 @@ public class Slot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
+
     private boolean isBooked = false;
-    // In your Spring Boot Slot.java
-    private String bookedByName; // Store the name of the user who booked
+
+    // Relationship with the Vendor (Turf/Shop)
     @ManyToOne
     @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
-    // Standard Constructors
+    // FIX: Proper relationship with the User who booked the slot
+    @ManyToOne
+    @JoinColumn(name = "booked_by_user_id")
+    private User bookedByUser;
+
+    // Standard Constructor
     public Slot() {}
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    // --- GETTERS AND SETTERS ---
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-    public LocalDateTime getEndTime(){
-        return endTime;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getBookedByName() {
-        return bookedByName;
-    }
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
+    public LocalDateTime getStartTime() { return startTime; }
     public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+
     public boolean isBooked() { return isBooked; }
     public void setBooked(boolean booked) { isBooked = booked; }
-    public void setBookedByName(String bookedByName) { this.bookedByName = bookedByName; }
+
+    public Vendor getVendor() { return vendor; }
     public void setVendor(Vendor vendor) { this.vendor = vendor; }
 
-    public boolean getIsBooked() {
-        return isBooked;
-    }
-
-    public void setUserId(Long userId) {
-        id=userId;
-    }
+    public User getBookedByUser() { return bookedByUser; }
+    public void setBookedByUser(User bookedByUser) { this.bookedByUser = bookedByUser; }
 }

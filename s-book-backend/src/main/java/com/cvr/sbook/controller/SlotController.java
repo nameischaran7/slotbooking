@@ -2,6 +2,7 @@ package com.cvr.sbook.controller;
 import com.cvr.sbook.model.Slot;
 import com.cvr.sbook.model.User;
 import com.cvr.sbook.repository.SlotRepository;
+import com.cvr.sbook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,8 @@ public class SlotController {
     }
 
     // Update a slot to 'booked' status
-
+    @Autowired
+    private UserRepository userRepository;
     @PostMapping("/{slotId}/book")
     public Slot bookSlot(@PathVariable Long slotId, @RequestBody User userRequest) {
         Slot slot = slotRepository.findById(slotId)
@@ -38,10 +40,13 @@ public class SlotController {
             throw new RuntimeException("Slot is already booked, mowa!");
         }
 
-        slot.setBooked(true);
+        // NEW: Fetch the full user details using the ID from the request
+        // This ensures the 'name' is not null in the response!
+        User fullUser = userRepository.findById(userRequest.getId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userRequest.getId()));
 
-        // FIX: Set the actual User object instead of just a name string
-        slot.setBookedByUser(userRequest);
+        slot.setBooked(true);
+        slot.setBookedByUser(fullUser);
 
         return slotRepository.save(slot);
     }

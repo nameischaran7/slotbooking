@@ -12,6 +12,6 @@ public interface VendorRepository extends JpaRepository<Vendor, Long> {
     // This interface automatically gives you Save, Find, Delete, etc.
     Optional<Vendor> findByEmail(String email);
     List<Vendor> findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCaseOrLocationContainingIgnoreCase(
-            String name, String category, String location
+            String name, String category, String location,Double pricePerHour
     );
 }

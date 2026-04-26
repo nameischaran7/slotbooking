@@ -1,5 +1,4 @@
 package com.cvr.sbook.controller;
-
 import com.cvr.sbook.model.Vendor;
 import com.cvr.sbook.repository.VendorRepository;
 import com.cvr.sbook.service.SlotService;
@@ -8,22 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/vendors")
 public class VendorController {
-
     @Autowired
     private VendorRepository vendorRepository;
-
     @Autowired
     private SlotService slotService;
-
     @GetMapping
     public List<Vendor> getAllVendors() {
         return vendorRepository.findAll();
     }
-
     // This handles the main Vendor Signup and Slot Generation
     @PostMapping("/signup")
     public Vendor signupVendor(@RequestBody Vendor vendor) {
@@ -32,13 +26,10 @@ public class VendorController {
         slotService.generateDailySlots(savedVendor);
         return savedVendor;
     }
-
     @GetMapping("/test")
     public String test() {
         return "Controller is working, mowa!";
     }
-
-
     // Manual slot generation if something goes wrong
     @PostMapping("/generate/{vendorId}")
     public ResponseEntity<String> createSlots(@PathVariable Long vendorId) {
@@ -53,7 +44,7 @@ public class VendorController {
     public List<Vendor> searchVendors(@RequestParam String query) {
         // We pass the same 'query' string three times to search all three fields
         return vendorRepository.findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCaseOrLocationContainingIgnoreCase(
-                query, query, query
+                query, query, query, Double.valueOf(query)
         );
     }
 }

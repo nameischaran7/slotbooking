@@ -1,5 +1,4 @@
 package com.cvr.sbook.controller;
-
 import com.cvr.sbook.model.User;
 import com.cvr.sbook.model.Vendor;
 import com.cvr.sbook.repository.UserRepository;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")

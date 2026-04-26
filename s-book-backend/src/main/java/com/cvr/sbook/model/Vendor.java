@@ -26,6 +26,11 @@ public class Vendor {
     public Long getId(){
         return id;
     }
+
+    public Double getPricePerHour() {
+        return pricePerHour;
+    }
+
     public String getName(){
         return name;
     }

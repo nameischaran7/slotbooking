@@ -48,4 +48,12 @@ public class Slot {
     public void setBooked(boolean booked) { isBooked = booked; }
     public void setBookedByName(String bookedByName) { this.bookedByName = bookedByName; }
     public void setVendor(Vendor vendor) { this.vendor = vendor; }
+
+    public boolean getIsBooked() {
+        return isBooked;
+    }
+
+    public void setUserId(Long userId) {
+        id=userId;
+    }
 }

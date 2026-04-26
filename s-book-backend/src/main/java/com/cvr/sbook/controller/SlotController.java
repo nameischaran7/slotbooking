@@ -1,5 +1,4 @@
 package com.cvr.sbook.controller;
-
 import com.cvr.sbook.model.Slot;
 import com.cvr.sbook.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +40,9 @@ public class SlotController {
         slot.setBooked(true);
         slot.setBookedByName(slotDetails.getBookedByName()); // Save the user's name from the app
         return slotRepository.save(slot);
+    }
+    @GetMapping("/user/{userId}")
+    public List<Slot> getUserBookings(@PathVariable Long userId) {
+        return slotRepository.findByBookedByUserId(userId);
     }
 }

@@ -1,5 +1,6 @@
 package com.cvr.sbook.controller;
 import com.cvr.sbook.model.Slot;
+import com.cvr.sbook.model.User;
 import com.cvr.sbook.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class SlotController {
     // Update a slot to 'booked' status
 
     @PostMapping("/{slotId}/book")
-    public Slot bookSlot(@PathVariable Long slotId, @RequestBody Slot slotDetails) {
+    public Slot bookSlot(@PathVariable Long slotId, @RequestBody User userRequest) {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
 
@@ -38,7 +39,10 @@ public class SlotController {
         }
 
         slot.setBooked(true);
-        slot.setBookedByName(slotDetails.getBookedByName()); // Save the user's name from the app
+
+        // FIX: Set the actual User object instead of just a name string
+        slot.setBookedByUser(userRequest);
+
         return slotRepository.save(slot);
     }
     @GetMapping("/user/{userId}")

@@ -54,4 +54,11 @@ public class SlotController {
     public List<Slot> getUserBookings(@PathVariable Long userId) {
         return slotRepository.findByBookedByUserId(userId);
     }
+    @PostMapping("/{slotId}/checkin")
+    public Slot checkIn(@PathVariable Long slotId) {
+        Slot slot = slotRepository.findById(slotId).orElseThrow();
+        slot.setBooked(false); // This is what "unbooks" the slot
+        slot.setBookedByUser(null);
+        return slotRepository.save(slot);
+    }
 }

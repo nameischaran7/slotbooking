@@ -4,59 +4,73 @@ import com.cvr.sbook.model.Slot;
 import com.cvr.sbook.model.User;
 import com.cvr.sbook.model.Vendor;
 import com.cvr.sbook.repository.SlotRepository;
+import com.cvr.sbook.repository.VendorRepository; // Add this
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled; // Add this
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class SlotService {
 
     @Autowired
     private SlotRepository slotRepository;
+
+    @Autowired
+    private VendorRepository vendorRepository;
+
+    /**
+     * CORE BOOKING LOGIC
+     * Using @Transactional ensures Atomic operations (Concurrency Prevention)
+     */
     @Transactional
-    // Inside SlotService.java
     public Slot bookSlot(Long slotId, User user) {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
 
-        // FIX: Change getIsBooked() to isBooked()
         if (slot.isBooked()) {
-            throw new RuntimeException("Slot already booked!");
+            throw new RuntimeException("Slot already booked, mowa!");
         }
 
         slot.setBooked(true);
-        // FIX: Instead of setBookedByName(string), we use the User relationship
         slot.setBookedByUser(user);
 
         return slotRepository.save(slot);
     }
+
+    /**
+     * AUTOMATED REFRESH LOGIC
+     * Runs every day at midnight (Cron: 0 0 0 * * *)
+     */
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void autoRefreshSlots() {
+        // 1. Clear old bookings for a fresh start
+        slotRepository.deleteAll();
+
+        // 2. Re-generate slots for all registered vendors
+        List<Vendor> vendors = vendorRepository.findAll();
+        for (Vendor vendor : vendors) {
+            generateDailySlots(vendor);
+        }
+        System.out.println("Midnight Refresh: All slots re-generated for all vendors!");
+    }
+
     public void generateDailySlots(Vendor vendor) {
         // Start from 9 AM today
         LocalDateTime startTime = LocalDateTime.now().with(LocalTime.of(9, 0, 0));
 
-        for (int i = 0; i < 12; i++) { // Generate 12 slots (1 hour each)
+        for (int i = 0; i < 12; i++) {
             Slot slot = new Slot();
-            slot.setStartTime(startTime.plusHours(i));
+            // Storing as String if your model expects String, or LocalDateTime
+            slot.setStartTime(LocalDateTime.parse(startTime.plusHours(i).toString()));
             slot.setVendor(vendor);
             slot.setBooked(false);
             slotRepository.save(slot);
         }
-
-    }
-    // Pass the userName as a parameter
-    public Slot bookSlot(Long slotId, String userName) {
-        Slot slot = slotRepository.findById(slotId)
-                .orElseThrow(() -> new RuntimeException("Slot not found"));
-
-        if (slot.isBooked()) {
-            throw new RuntimeException("Slot already booked!");
-        }
-
-        slot.setBooked(true);
-
-        return slotRepository.save(slot);
     }
 }

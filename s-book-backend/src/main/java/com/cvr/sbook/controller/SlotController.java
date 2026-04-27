@@ -55,6 +55,18 @@ public class SlotController {
     public List<Slot> getUserBookings(@PathVariable Long userId) {
         return slotRepository.findByBookedByUserId(userId);
     }
+    @PostMapping("/{slotId}/cancel")
+    public ResponseEntity<?> cancelBooking(@PathVariable Long slotId) {
+        return slotRepository.findById(slotId).map(slot -> {
+            if (!slot.isBooked()) {
+                return ResponseEntity.badRequest().body("Slot is not booked!");
+            }
+            slot.setBooked(false);
+            slot.setBookedByUser(null);
+            slotRepository.save(slot);
+            return ResponseEntity.ok("Booking Cancelled");
+        }).orElse(ResponseEntity.status(404).body("Slot not found"));
+    }
     @PostMapping("/{slotId}/verify-checkin")
     public ResponseEntity<?> verifyAndCheckIn(@PathVariable Long slotId) {
         return slotRepository.findById(slotId).map(slot -> {

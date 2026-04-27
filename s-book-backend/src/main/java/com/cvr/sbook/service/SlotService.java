@@ -46,7 +46,7 @@ public class SlotService {
      * AUTOMATED REFRESH LOGIC
      * Runs every day at midnight (Cron: 0 0 0 * * *)
      */
-    @Scheduled(cron = "0 10 0 * * *")
+    @Scheduled(cron = "0 20 0 * * *")
     @Transactional
     public void autoRefreshSlots() {
         // 1. Clear old bookings for a fresh start

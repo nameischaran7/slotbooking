@@ -4,6 +4,7 @@ import com.cvr.sbook.model.User;
 import com.cvr.sbook.repository.SlotRepository;
 import com.cvr.sbook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,11 +55,20 @@ public class SlotController {
     public List<Slot> getUserBookings(@PathVariable Long userId) {
         return slotRepository.findByBookedByUserId(userId);
     }
-    @PostMapping("/{slotId}/checkin")
-    public Slot checkIn(@PathVariable Long slotId) {
-        Slot slot = slotRepository.findById(slotId).orElseThrow();
-        slot.setBooked(false); // This is what "unbooks" the slot
-        slot.setBookedByUser(null);
-        return slotRepository.save(slot);
+    @PostMapping("/{slotId}/verify-checkin")
+    public ResponseEntity<?> verifyAndCheckIn(@PathVariable Long slotId) {
+        return slotRepository.findById(slotId).map(slot -> {
+            if (!slot.isBooked()) {
+                return ResponseEntity.badRequest().body("This slot was never booked, mowa!");
+            }
+
+            // Update the status to 'false' so it becomes available again
+            // OR you can add a 'status' String field like "COMPLETED"
+            slot.setBooked(false);
+          slot.setBookedByUser(null);// Clear the name
+            slotRepository.save(slot);
+
+            return ResponseEntity.ok("Check-in Successful for slot: " + slotId);
+        }).orElse(ResponseEntity.status(404).body("Invalid Slot ID"));
     }
 }

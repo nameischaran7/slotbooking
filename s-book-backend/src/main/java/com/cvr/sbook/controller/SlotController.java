@@ -58,14 +58,13 @@ public class SlotController {
     @PostMapping("/{slotId}/cancel")
     public ResponseEntity<?> cancelBooking(@PathVariable Long slotId) {
         return slotRepository.findById(slotId).map(slot -> {
-            if (!slot.isBooked()) {
-                return ResponseEntity.badRequest().body("Slot is not booked!");
-            }
             slot.setBooked(false);
             slot.setBookedByUser(null);
             slotRepository.save(slot);
-            return ResponseEntity.ok("Booking Cancelled");
-        }).orElse(ResponseEntity.status(404).body("Slot not found"));
+
+            // Return a JSON object instead of a String
+            return ResponseEntity.ok().body(java.util.Collections.singletonMap("message", "Cancelled"));
+        }).orElse(ResponseEntity.status(404).body(java.util.Collections.singletonMap("error", "Not Found")));
     }
     @PostMapping("/{slotId}/verify-checkin")
     public ResponseEntity<?> verifyAndCheckIn(@PathVariable Long slotId) {
